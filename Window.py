@@ -33,19 +33,59 @@ def simple_transformed_values(val1, val2):
             val1[i] = (0.0)
     return val1
 
-def window(val):
-    sub_window_size = 250
-    threshold = 0.2
-    res = []
-    for i in range(sub_window_size, len(val1) - sub_window_size):
-        left_sub_window = np.array(val[i-sub_window_size:i])
-        right_sub_window = np.array(val[i+1:i+sub_window_size])
-        left_sub_window_median = np.median(left_sub_window)
-        right_sub_window_median = np.median(right_sub_window)
-        err = np.fabs(left_sub_window_median - right_sub_window_median)
+def extract_ts_fea(ts_segment):
+    """
+    Extract feature vector from given time series segment.
 
-        #if err > (threshold * left_sub_window_median):
-        res.append(err)
+    Example:
+    ts_segment = np.array([1.0, 2.0, 3.0, 100.0, 12.21.,...,]
+    fea = [0.1, 0.3, 0.4, 0.2, ..., 0.9]
+
+    fea = extract_ts_fea(ts_segment)
+
+    :param ts_segment: a numpy array,
+    :return: a numpy array which is the extracted feature vector
+    """
+    pass
+
+
+def fea_filter(fea):
+    """
+    Filter the input feature vector, to remove several frequence.
+
+    Example:
+    frequency = [10, 20, 30, 40, 50]
+    fea = [0.1, 0.3, 0.4, 0.2, 0.9]
+    filtered_fea = [0.1, 0.3, 0.4, 0.0, 0.0]
+
+    :param fea: an numpy array
+    :return: an numpy array
+    """
+    pass
+
+
+def window_based_cp_detection(data, sub_window_size=250, threshold=0.2):
+    """
+    Detect the change points in data. Assume the input data is a time series without
+    any missing values.
+
+    :param data: numpy array, one single time series
+    :return: list object with all change points
+    """
+    sub_window_size = sub_window_size
+    threshold = threshold
+
+    res = []
+    for i in range(sub_window_size : (len(data) - sub_window_size) : 5):
+
+        left_sub_window = np.array(data[i-sub_window_size:i])
+        right_sub_window = np.array(data[i+1:i+sub_window_size])
+
+        left_fea = extract_ts_fea(left_sub_window)
+        right_fea = extract_ts_fea(right_sub_window)
+
+        res.append([left_fea, right_fea])
+
     return res
 
 if __name__ == '__main__':
